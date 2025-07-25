@@ -1,0 +1,17 @@
+{
+  "projectName": "bye-cheating-frontend-remake",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "bun",
+  "git": true,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "eslint",
+    "tanstack-query",
+    "form",
+    "shadcn",
+    "t3env"
+  ]
+}
