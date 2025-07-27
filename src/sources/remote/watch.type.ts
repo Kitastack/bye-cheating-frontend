@@ -7,7 +7,7 @@ export const GetStreamingSchema = baseApiResponseSchema(
   prediction: z
     .array(
       z.object({
-        id: z.string(),
+        track_id: z.string(),
         name: z.string(),
         confidence: z.number(),
       }),

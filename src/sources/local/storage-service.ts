@@ -3,14 +3,14 @@ const REFRESH_TOKEN = 'refresh_token'
 
 export const StorageService = {
   getAccessToken: () => {
-    return localStorage.getItem(ACCESS_TOKEN) || ''
+    return localStorage.getItem(ACCESS_TOKEN)
   },
 
   setAccessToken: (token: string) => {
     localStorage.setItem(ACCESS_TOKEN, token)
   },
   getRefreshToken: () => {
-    return localStorage.getItem(REFRESH_TOKEN) || ''
+    return localStorage.getItem(REFRESH_TOKEN)
   },
   setRefreshToken: (token: string) => {
     localStorage.setItem(REFRESH_TOKEN, token)

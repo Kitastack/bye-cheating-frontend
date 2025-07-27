@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import type { BaseApiResponse } from '@/sources/api/root.type'
-import { baseApiResponseSchema } from '@/sources/api/root.type'
+import { baseApiResponseSchema } from './root.type'
+import type { BaseApiResponse } from './root.type'
 
 type User = {
   id: string
