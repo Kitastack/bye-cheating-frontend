@@ -132,7 +132,15 @@ code {
   * {
     @apply border-border outline-ring/50;
   }
+  :root {
+    @apply flex h-screen w-screen;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply relative flex grow flex-col bg-background text-foreground;
+  }
+  
+  /* Root React */
+  div#app {
+    @apply flex grow flex-col;
   }
 }
