@@ -7,8 +7,14 @@ import * as TanStackQueryProvider from './integrations/tanstack-query/root-provi
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
+// @ts-ignore ignore font import errors
+import '@fontsource-variable/jetbrains-mono'
+//  @ts-ignore ignore font import errors
+import '@fontsource-variable/bitcount-prop-single'
+
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
+import { ThemeProvider } from './provider/theme-provider.tsx'
 
 // Create a new router instance
 const router = createRouter({
@@ -35,9 +41,11 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <TanStackQueryProvider.Provider>
-        <RouterProvider router={router} />
-      </TanStackQueryProvider.Provider>
+      <ThemeProvider>
+        <TanStackQueryProvider.Provider>
+          <RouterProvider router={router} />
+        </TanStackQueryProvider.Provider>
+      </ThemeProvider>
     </StrictMode>,
   )
 }

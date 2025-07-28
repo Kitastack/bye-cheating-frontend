@@ -4,6 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --font-bit: 'Bitcount Prop Single Variable', monospace;
+  --font-jetbrains: 'JetBrains Mono Variable', monospace;
+}
+
 body {
   @apply m-0;
   font-family:
@@ -31,13 +36,13 @@ code {
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.967 0.001 286.375);
   --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
+  --accent: oklch(97.39% 0.01844 100.18);
   --accent-foreground: oklch(0.21 0.006 285.885);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.871 0.006 286.286);
+  --border: oklch(92.515% 0.0028 84.319);
+  --input: oklch(86.686% 0.0001 271.152);
+  --ring: oklch(87.785% 0.00802 73.53);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -72,7 +77,7 @@ code {
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
   --border: oklch(0.274 0.006 286.033);
-  --input: oklch(0.274 0.006 286.033);
+  --input: oklch(30.235% 0.00538 285.987);
   --ring: oklch(0.442 0.017 285.786);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -138,9 +143,18 @@ code {
   body {
     @apply relative flex grow flex-col bg-background text-foreground;
   }
-  
+
   /* Root React */
   div#app {
     @apply flex grow flex-col;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
