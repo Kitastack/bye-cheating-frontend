@@ -1,7 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
-import React from 'react'
-import { EyeClosedIcon, EyeIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
@@ -11,7 +9,7 @@ import { DarkModeToggle } from '@/components/molecules/dark-mode-toggle'
 import { PasswordInput } from '@/components/ui/password-input'
 
 export const Route = createFileRoute('/login')({
-  component: Login,
+  component: LoginComponent,
 })
 
 function LoginForm({ className }: { className?: string }) {
@@ -116,7 +114,7 @@ function LoginForm({ className }: { className?: string }) {
   )
 }
 
-function Login() {
+function LoginComponent() {
   return (
     <>
       <nav className="fixed top-0 right-0 z-50 m-8 flex items-center justify-end gap-4">
