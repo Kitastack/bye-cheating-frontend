@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod/mini'
 import { baseApiResponseSchema } from './root.type'
 
 export const LiveSchema = z.object({
@@ -6,17 +6,19 @@ export const LiveSchema = z.object({
   url: z.string(),
   streamId: z.string(),
   userId: z.string(),
-  expiryDate: z.string().optional(),
+  expiryDate: z.optional(z.string()),
   createdDate: z.string(),
-  updatedDate: z.string().optional(),
+  updatedDate: z.optional(z.string()),
 })
 
 export const GetLivesSchema = baseApiResponseSchema(z.array(LiveSchema))
-export const CreateLiveSchema = baseApiResponseSchema(LiveSchema.extend({
-  isPredictionEnabled: z.boolean(),
-  path: z.string(),
-  reportId: z.string().optional(),
-  expiryTimeInMinutes: z.number().optional(),
-}))
+export const CreateLiveSchema = baseApiResponseSchema(
+  z.extend(LiveSchema, {
+    isPredictionEnabled: z.boolean(),
+    path: z.string(),
+    reportId: z.optional(z.string()),
+    expiryTimeInMinutes: z.optional(z.number()),
+  }),
+)
 
 export const UpdateLiveSchema = baseApiResponseSchema(LiveSchema)

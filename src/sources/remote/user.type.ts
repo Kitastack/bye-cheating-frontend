@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/mini'
 import { baseApiResponseSchema } from './root.type'
 import type { BaseApiResponse } from './root.type'
 
@@ -14,13 +14,13 @@ type User = {
 }
 export const UserSchema = z.object({
   id: z.string(),
-  email: z.string().email(),
+  email: z.string(),
   name: z.string(),
   roles: z.array(z.string()),
   isVerified: z.boolean(),
   createdDate: z.string(),
-  updatedDate: z.string().optional(),
-  photo: z.string().optional(),
+  updatedDate: z.optional(z.string()),
+  photo: z.optional(z.string()),
 })
 
 export type GetUser = BaseApiResponse<User>
@@ -35,9 +35,9 @@ export type UpdateUser = BaseApiResponse<User>
 export const UpdateUserSchema = baseApiResponseSchema<User>(UserSchema)
 export const UpdateUserPOSTSchema = z.object({
   id: z.string(),
-  name: z.string().optional(),
-  email: z.string().email().optional(),
-  photo: z.string().optional(),
+  name: z.optional(z.string()),
+  email: z.optional(z.string()),
+  photo: z.optional(z.string()),
 })
 
 export type LoginUser = BaseApiResponse<
@@ -49,7 +49,7 @@ export type LoginUser = BaseApiResponse<
 export const LoginUserSchema = baseApiResponseSchema<
   User & { accessToken: string; refreshToken: string }
 >(
-  UserSchema.extend({
+  z.extend(UserSchema, {
     accessToken: z.string(),
     refreshToken: z.string(),
   }),

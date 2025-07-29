@@ -1,4 +1,4 @@
-import z from 'zod'
+import z from 'zod/mini'
 
 export interface BaseApiResponse<T> {
   success: boolean
@@ -6,9 +6,9 @@ export interface BaseApiResponse<T> {
   message?: string
 }
 
-export const baseApiResponseSchema = <T>(resultSchema: z.ZodType<T>) =>
+export const baseApiResponseSchema = <T>(resultSchema: z.ZodMiniType<T>) =>
   z.object({
     success: z.boolean(),
-    result: resultSchema.optional(),
-    message: z.string().optional(),
+    result: z.optional(resultSchema),
+    message: z.optional(z.string()),
   })
