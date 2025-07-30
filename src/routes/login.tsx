@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
+import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
@@ -7,6 +8,8 @@ import { Button } from '@/components/ui/button'
 import { ByeCheatingLogo } from '@/components/byecheating-logo'
 import { DarkModeToggle } from '@/components/molecules/dark-mode-toggle'
 import { PasswordInput } from '@/components/ui/password-input'
+import { runApi, user } from '@/sources/api'
+import { router } from '@/router'
 
 export const Route = createFileRoute('/login')({
   component: LoginComponent,
@@ -19,8 +22,21 @@ function LoginForm({ className }: { className?: string }) {
       password: '',
     },
     onSubmit: async (values) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000)) // Simulate async operation
-      console.log('Form submitted:', values)
+      const result = await runApi(() =>
+        user.loginUser({
+          email: values.value.email,
+          password: values.value.password,
+        }),
+      )
+      console.log('Login result:', result.success)
+      if (result.success) {
+        router.navigate({ to: '/app' })
+      } else {
+        console.error('Login failed:', result.message || 'Unknown error')
+        toast('Login Failed', {
+          description: result.message || 'Unknown error',
+        })
+      }
     },
   })
 
