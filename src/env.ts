@@ -1,9 +1,9 @@
 import { createEnv } from '@t3-oss/env-core'
-import z from 'zod/mini'
+import * as z from 'zod/mini'
 
 export const env = createEnv({
   server: {
-    SERVER_URL: z.optional(z.string()),
+    SERVER_URL: z.nullish(z.string()),
   },
 
   /**
@@ -13,7 +13,8 @@ export const env = createEnv({
   clientPrefix: 'VITE_',
 
   client: {
-    VITE_APP_TITLE: z.optional(z.string().check(z.minLength(1))),
+    VITE_APP_TITLE: z.nullish(z.string().check(z.minLength(1))),
+    VITE_BACKEND_URL: z.nullish(z.string()),
   },
 
   /**

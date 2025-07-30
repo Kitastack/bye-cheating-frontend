@@ -1,11 +1,8 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
-
+import { RouterProvider } from '@tanstack/react-router'
+import { CookiesProvider } from 'react-cookie'
 import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider.tsx'
-
-// Import the generated route tree
-import { routeTree } from './routeTree.gen'
 
 // @ts-ignore ignore font import errors
 import '@fontsource-variable/jetbrains-mono'
@@ -15,18 +12,7 @@ import '@fontsource-variable/bitcount-prop-single'
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { ThemeProvider } from './provider/theme-provider.tsx'
-
-// Create a new router instance
-const router = createRouter({
-  routeTree,
-  context: {
-    ...TanStackQueryProvider.getContext(),
-  },
-  defaultPreload: 'intent',
-  scrollRestoration: true,
-  defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
-})
+import { router } from './router.tsx'
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -41,11 +27,13 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <ThemeProvider>
-        <TanStackQueryProvider.Provider>
-          <RouterProvider router={router} />
-        </TanStackQueryProvider.Provider>
-      </ThemeProvider>
+      <CookiesProvider>
+        <ThemeProvider>
+          <TanStackQueryProvider.Provider>
+            <RouterProvider router={router} />
+          </TanStackQueryProvider.Provider>
+        </ThemeProvider>
+      </CookiesProvider>
     </StrictMode>,
   )
 }
