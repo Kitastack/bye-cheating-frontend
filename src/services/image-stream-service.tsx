@@ -3,9 +3,9 @@ import * as z from 'zod/mini'
 const ImageStreamingSchema = z.object({
   status: z.boolean(),
   /** `base64` image string */
-  result: z.optional(z.string()),
+  result: z.nullish(z.string()),
   /** prediction information. the availability is really depends on if the prediction is uses or not */
-  prediction: z.optional(
+  prediction: z.nullish(
     z.array(
       z.object({
         track_id: z.string(),
