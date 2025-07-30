@@ -1,4 +1,6 @@
+import { backendApi, backendApiWithAuth } from '../api'
 import { StorageService } from '../local/storage-service'
+import { parseResponse } from '../utils'
 import {
   GetUserSchema,
   GetUsersSchema,
@@ -7,44 +9,26 @@ import {
   RegisterUserSchema,
   UpdateUserSchema,
 } from './user.type'
-import { BACKEND_URL } from '@/lib/constant'
+import { router } from '@/router'
 
 export const getUser = async () => {
-  const accessToken = StorageService.getAccessToken()
-  const response = await fetch(`${BACKEND_URL}/user`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-  const body = await response.json()
-  const sanitizedBody = GetUserSchema.parse(body)
+  const response = await backendApiWithAuth.get(`/user`)
+  const body = response.data
+  const sanitizedBody = parseResponse(response.status, body, GetUserSchema)
   return sanitizedBody
 }
 
 export const getUsers = async () => {
-  const accessToken = StorageService.getAccessToken()
-  const response = await fetch(`${BACKEND_URL}/user/list`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-  const body = await response.json()
-  const sanitizedBody = GetUsersSchema.parse(body)
+  const response = await backendApiWithAuth.get(`/user/list`)
+  const body = await response.data
+  const sanitizedBody = parseResponse(response.status, body, GetUsersSchema)
   return sanitizedBody
 }
 
 export const updateUser = async (userData: { name?: string }) => {
-  const accessToken = StorageService.getAccessToken()
-  const response = await fetch(`${BACKEND_URL}/user`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(userData),
-  })
-  const body = await response.json()
-  const sanitizedBody = UpdateUserSchema.parse(body)
+  const response = await backendApiWithAuth.patch(`/user`, userData)
+  const body = await response.data
+  const sanitizedBody = parseResponse(response.status, body, UpdateUserSchema)
   return sanitizedBody
 }
 
@@ -59,17 +43,9 @@ export const updateUserAdmin = async (userData: {
   email?: string
   photo?: string
 }) => {
-  const accessToken = StorageService.getAccessToken()
-  const response = await fetch(`${BACKEND_URL}/user/update`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(userData),
-  })
-  const body = await response.json()
-  const sanitizedBody = UpdateUserSchema.parse(body)
+  const response = await backendApiWithAuth.patch(`/user/update`, userData)
+  const body = await response.data
+  const sanitizedBody = parseResponse(response.status, body, UpdateUserSchema)
   return sanitizedBody
 }
 
@@ -78,15 +54,9 @@ export const registerUser = async (userData: {
   name: string
   password: string
 }) => {
-  const response = await fetch(`${BACKEND_URL}/user/signup`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(userData),
-  })
-  const body = await response.json()
-  const sanitizedBody = RegisterUserSchema.parse(body)
+  const response = await backendApiWithAuth.post(`/user/signup`, userData)
+  const body = await response.data
+  const sanitizedBody = parseResponse(response.status, body, RegisterUserSchema)
   return sanitizedBody
 }
 
@@ -94,36 +64,36 @@ export const loginUser = async (credentials: {
   email: string
   password: string
 }) => {
-  const response = await fetch('/user/signin', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(credentials),
-  })
-  const body = await response.json()
-  const sanitizedBody = LoginUserSchema.parse(body)
+  const response = await backendApi.post('/user/signin', credentials)
+  const body = await response.data
+  const sanitizedBody = parseResponse(response.status, body, LoginUserSchema)
 
   StorageService.setAccessToken(sanitizedBody.result?.accessToken ?? '')
   StorageService.setRefreshToken(sanitizedBody.result?.refreshToken ?? '')
-  return
+  return sanitizedBody
 }
 
 export const logoutUser = () => {
   StorageService.clearTokens()
+  router.navigate({ to: '/login', replace: true })
+  // Optionally, you can also clear user data from the store
   return true
 }
 
 export const refreshToken = async () => {
-  const response = await fetch(`${BACKEND_URL}/user/token`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${StorageService.getRefreshToken()}`,
-    },
+  const token = StorageService.getRefreshToken()
+  const response = await backendApiWithAuth.post(`/user/token`, {
+    token: token,
   })
-  const body = await response.json()
-  const sanitizedBody = RefreshTokenUserSchema.parse(body)
+  const body = await response.data
+  const sanitizedBody = parseResponse(
+    response.status,
+    body,
+    RefreshTokenUserSchema,
+  )
+  if (sanitizedBody.success == false) {
+    throw new Error('Failed to refresh token')
+  }
 
   StorageService.setAccessToken(sanitizedBody.result?.token ?? '')
 

@@ -1,10 +1,10 @@
-import z from 'zod/mini'
+import * as z from 'zod/mini'
 import { baseApiResponseSchema } from './root.type'
 
 export const GetStreamingSchema = z.extend(
-  baseApiResponseSchema(z.optional(z.string())),
+  baseApiResponseSchema(z.nullish(z.string())),
   {
-    prediction: z.optional(
+    prediction: z.nullish(
       z.array(
         z.object({
           track_id: z.string(),

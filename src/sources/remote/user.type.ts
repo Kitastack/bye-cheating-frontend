@@ -1,17 +1,6 @@
-import { z } from 'zod/mini'
+import * as z from 'zod/mini'
 import { baseApiResponseSchema } from './root.type'
-import type { BaseApiResponse } from './root.type'
 
-type User = {
-  id: string
-  email: string
-  name: string
-  roles: Array<string>
-  isVerified: boolean
-  createdDate: string
-  updatedDate?: string
-  photo?: string
-}
 export const UserSchema = z.object({
   id: z.string(),
   email: z.string(),
@@ -19,47 +8,32 @@ export const UserSchema = z.object({
   roles: z.array(z.string()),
   isVerified: z.boolean(),
   createdDate: z.string(),
-  updatedDate: z.optional(z.string()),
-  photo: z.optional(z.string()),
+  updatedDate: z.nullish(z.string()),
+  photo: z.nullish(z.string()),
 })
 
-export type GetUser = BaseApiResponse<User>
-export const GetUserSchema = baseApiResponseSchema<User>(UserSchema)
+export const GetUserSchema = baseApiResponseSchema(UserSchema)
 
-export type GetUsers = BaseApiResponse<Array<User>>
-export const GetUsersSchema = baseApiResponseSchema<Array<User>>(
-  z.array(UserSchema),
-)
+export const GetUsersSchema = baseApiResponseSchema(z.array(UserSchema))
 
-export type UpdateUser = BaseApiResponse<User>
-export const UpdateUserSchema = baseApiResponseSchema<User>(UserSchema)
+export const UpdateUserSchema = baseApiResponseSchema(UserSchema)
 export const UpdateUserPOSTSchema = z.object({
   id: z.string(),
-  name: z.optional(z.string()),
-  email: z.optional(z.string()),
-  photo: z.optional(z.string()),
+  name: z.nullish(z.string()),
+  email: z.nullish(z.string()),
+  photo: z.nullish(z.string()),
 })
 
-export type LoginUser = BaseApiResponse<
-  User & {
-    accessToken: string
-    refreshToken: string
-  }
->
-export const LoginUserSchema = baseApiResponseSchema<
-  User & { accessToken: string; refreshToken: string }
->(
-  z.extend(UserSchema, {
+export const LoginUserSchema = baseApiResponseSchema(
+  z.object({
     accessToken: z.string(),
     refreshToken: z.string(),
   }),
 )
 
-export type RegisterUser = BaseApiResponse<User>
-export const RegisterUserSchema = baseApiResponseSchema<User>(UserSchema)
+export const RegisterUserSchema = baseApiResponseSchema(UserSchema)
 
-export type RefreshTokenUser = BaseApiResponse<{ token: string }>
-export const RefreshTokenUserSchema = baseApiResponseSchema<{ token: string }>(
+export const RefreshTokenUserSchema = baseApiResponseSchema(
   z.object({
     token: z.string(),
   }),
