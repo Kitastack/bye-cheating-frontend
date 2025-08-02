@@ -1,19 +1,34 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { runApi, user } from '@/sources/api'
+import { toast } from 'sonner'
+import { AxiosError } from 'axios'
+import { user } from '@/sources/api'
 import { DashboardLayout } from '@/layout/dashboard-layout'
 
 export const Route = createFileRoute('/app')({
   beforeLoad: async ({ location }) => {
     try {
-      const response = await runApi(() => user.getUser())
-      if (response.success === false) throw new Error('User unauthorized')
+      const response = await user.getUser()
     } catch (error) {
-      console.error('Failed to fetch user data:', error)
-      // redirect to login page
-      throw redirect({ to: '/login', search: { redirect: location.href } })
+      if (error instanceof AxiosError && error.response?.status === 403) {
+        toast.error('Unauthorized access', {
+          description: 'You need to log in to access this page.',
+        })
+        // redirect to login page
+        throw redirect({ to: '/login', search: { redirect: location.href } })
+      }
+      throw error as Error
     }
   },
   component: RouteComponent,
+  errorComponent: ({ error }) => (
+    <div className="flex h-full items-center justify-center">
+      <p className="text-red-500">Error: {error.message}</p>
+    </div>
+  ),
+
+  pendingComponent: () => (
+    <div className="flex h-full items-center justify-center">Loading...</div>
+  ),
 })
 
 function RouteComponent() {

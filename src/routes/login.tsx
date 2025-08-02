@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
+import { AxiosError } from 'axios'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
@@ -8,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { ByeCheatingLogo } from '@/components/byecheating-logo'
 import { DarkModeToggle } from '@/components/molecules/dark-mode-toggle'
 import { PasswordInput } from '@/components/ui/password-input'
-import { runApi, user } from '@/sources/api'
+import { user } from '@/sources/api'
 import { router } from '@/router'
 
 export const Route = createFileRoute('/login')({
@@ -22,20 +23,22 @@ function LoginForm({ className }: { className?: string }) {
       password: '',
     },
     onSubmit: async (values) => {
-      const result = await runApi(() =>
-        user.loginUser({
+      try {
+        const result = await user.loginUser({
           email: values.value.email,
           password: values.value.password,
-        }),
-      )
-      console.log('Login result:', result.success)
-      if (result.success) {
-        router.navigate({ to: '/app' })
-      } else {
-        console.error('Login failed:', result.message || 'Unknown error')
-        toast('Login Failed', {
-          description: result.message || 'Unknown error',
         })
+        if (result.success) {
+          toast.success('Login successful!')
+          router.navigate({ to: '/app' })
+        }
+      } catch (error) {
+        console.error('Login error:', error)
+        if (error instanceof AxiosError) {
+          toast.error(`Login failed`, { description: error.message })
+          return
+        }
+        toast.error('Login failed. Please check your credentials.')
       }
     },
   })

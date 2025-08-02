@@ -13,6 +13,7 @@ import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import { ThemeProvider } from './provider/theme-provider.tsx'
 import { router } from './router.tsx'
+import { Toaster } from './components/ui/sonner.tsx'
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -34,6 +35,7 @@ if (rootElement && !rootElement.innerHTML) {
           </TanStackQueryProvider.Provider>
         </ThemeProvider>
       </CookiesProvider>
+      <Toaster />
     </StrictMode>,
   )
 }
