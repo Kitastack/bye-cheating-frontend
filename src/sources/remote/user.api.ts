@@ -1,4 +1,4 @@
-import { backendApi, backendApiWithAuth } from '../api'
+import { backendApi, backendApiWithAuth, runApi } from '../api'
 import { StorageService } from '../local/storage-service'
 import { parseResponse } from '../utils'
 import {
@@ -65,9 +65,12 @@ export const loginUser = async (credentials: {
   password: string
 }) => {
   const response = await backendApi.post('/user/signin', credentials)
-  const body = await response.data
-  const sanitizedBody = parseResponse(response.status, body, LoginUserSchema)
 
+  const sanitizedBody = parseResponse(
+    response.status,
+    response.data,
+    LoginUserSchema,
+  )
   StorageService.setAccessToken(sanitizedBody.result?.accessToken ?? '')
   StorageService.setRefreshToken(sanitizedBody.result?.refreshToken ?? '')
   return sanitizedBody
@@ -76,10 +79,13 @@ export const loginUser = async (credentials: {
 export const logoutUser = () => {
   StorageService.clearTokens()
   router.navigate({ to: '/login', replace: true })
-  // Optionally, you can also clear user data from the store
-  return true
 }
 
+/**
+ * refreshes the access token using the refresh token.
+ * you don't need to pass the refresh token, it is stored in localStorage by using this function
+ * @returns
+ */
 export const refreshToken = async () => {
   const token = StorageService.getRefreshToken()
   const response = await backendApiWithAuth.post(`/user/token`, {
@@ -91,11 +97,12 @@ export const refreshToken = async () => {
     body,
     RefreshTokenUserSchema,
   )
-  if (sanitizedBody.success == false) {
-    throw new Error('Failed to refresh token')
-  }
-
   StorageService.setAccessToken(sanitizedBody.result?.token ?? '')
 
-  return sanitizedBody.result?.token ?? ''
+  return {
+    responseCode: sanitizedBody.responseCode,
+    success: sanitizedBody.success,
+    result: sanitizedBody.result?.token,
+    message: sanitizedBody.message,
+  }
 }

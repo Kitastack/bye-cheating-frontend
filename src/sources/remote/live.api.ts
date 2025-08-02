@@ -1,4 +1,4 @@
-import { backendApiWithAuth } from '../api'
+import { backendApiWithAuth, runApi } from '../api'
 import { parseResponse } from '../utils'
 import { CreateLiveSchema, GetLivesSchema, UpdateLiveSchema } from './live.type'
 
@@ -10,10 +10,13 @@ import { CreateLiveSchema, GetLivesSchema, UpdateLiveSchema } from './live.type'
  * @returns
  */
 export const getVideoLives = async () => {
-  const response = await backendApiWithAuth.get(`/live`)
-  const body = await response.data
-  const sanitizedBody = parseResponse(response.status, body, GetLivesSchema)
-  return sanitizedBody
+  const result = await runApi(async () => {
+    const response = await backendApiWithAuth.get(`/live`)
+    const body = await response.data
+    const sanitizedBody = parseResponse(response.status, body, GetLivesSchema)
+    return sanitizedBody
+  })
+  return result
 }
 /**
  * create a new video live.
@@ -30,10 +33,13 @@ export const createVideoLive = async (liveData: {
   streamId: string
   expiryTimeInMinutes?: number
 }) => {
-  const response = await backendApiWithAuth.post(`/live`, liveData)
-  const body = await response.data
-  const sanitizedBody = parseResponse(response.status, body, CreateLiveSchema)
-  return sanitizedBody
+  const result = await runApi(async () => {
+    const response = await backendApiWithAuth.post(`/live`, liveData)
+    const body = await response.data
+    const sanitizedBody = parseResponse(response.status, body, CreateLiveSchema)
+    return sanitizedBody
+  })
+  return result
 }
 
 /**
@@ -48,8 +54,11 @@ export const updateVideoLive = async (liveData: {
   id: string
   expiryTimeInMinutes?: number
 }) => {
-  const response = await backendApiWithAuth.patch(`/live`, liveData)
-  const body = await response.data
-  const sanitizedBody = parseResponse(response.status, body, UpdateLiveSchema)
-  return sanitizedBody
+  const result = await runApi(async () => {
+    const response = await backendApiWithAuth.patch(`/live`, liveData)
+    const body = await response.data
+    const sanitizedBody = parseResponse(response.status, body, UpdateLiveSchema)
+    return sanitizedBody
+  })
+  return result
 }

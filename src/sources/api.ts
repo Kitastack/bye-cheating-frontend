@@ -79,37 +79,27 @@ backendApiWithAuth.interceptors.response.use(
           return Promise.reject(new AuthError('Failed to refresh token'))
         }
       } else if (error.response.status >= 500) {
-        // Handle server errors
         console.error('Server error:', error.response.data)
-      }
-      if (error instanceof AxiosError) {
+        return Promise.reject(error)
       }
     } else if (error.request) {
-      // Handle network errors
-      console.error('Network error:', error.message)
       return Promise.reject(error)
     }
     return Promise.reject(error)
   },
 )
 
-const defaultResult = {
-  responseCode: 0,
-  success: false,
-  result: null,
-  message: '',
-}
-
 /**
  * wraps and API calls with error handling and parsing
  * @template T - The type of the API response
  * @param apiFunction - The API function to call, found at `@/sources/api.ts`
- * @returns 
+ * @returns
  */
 export const runApi = async <T>(apiFunction: () => Promise<T>) => {
   const result = await apiFunction().catch((error) => parseErrorResponse(error))
-  return result ?? defaultResult 
+  return result
 }
+
 export { user, live, stream, watch }
 export { AuthError }
 export { backendApi, backendApiWithAuth }

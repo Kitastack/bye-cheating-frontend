@@ -1,4 +1,4 @@
-import { backendApiWithAuth } from '../api'
+import { backendApiWithAuth, runApi } from '../api'
 import { parseResponse } from '../utils'
 import { GetStreamingSchema } from './watch.type'
 /**
@@ -6,7 +6,7 @@ import { GetStreamingSchema } from './watch.type'
  * @param liveId {string} - The ID of the live session to fetch streaming data for
  */
 export const getWatchStreaming = async (liveId: string) => {
-  const response = await backendApiWithAuth(`/watch/live/${liveId}`)
+  const response = await backendApiWithAuth.get(`/watch/live/${liveId}`)
   const body = await response.data
   const sanitizedBody = parseResponse(response.status, body, GetStreamingSchema)
   return sanitizedBody
@@ -15,7 +15,7 @@ export const getWatchStreaming = async (liveId: string) => {
 export const extendAMinuteAndGetStreaming = async (liveId: string) => {
   const response = await backendApiWithAuth.post(
     `/watch/live/${liveId}/extend-more-minutes`,
-    {},
+    { extendMoreMinutes: 5 },
   )
   const body = await response.data
   const sanitizedBody = parseResponse(response.status, body, GetStreamingSchema)

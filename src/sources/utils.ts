@@ -1,4 +1,5 @@
 import { baseApiErrorResponseSchema } from './remote/root.type'
+import type { AxiosError } from 'axios'
 import type * as z from 'zod/mini'
 /**
  * generic utils for parsing the body response using zod, with return type is generic object that merge with response code
@@ -12,7 +13,7 @@ export function parseResponse<T>(
   responseCode: number,
   body: unknown,
   schema: z.ZodMiniType<T>,
-): T & { responseCode: number } {
+): T & { responseCode: number; responseStatus: null } {
   console.log('Parsing response with code:', responseCode, 'and body:', body)
   const parsedBody = schema.safeParse({ ...(body as object), responseCode })
 
@@ -20,15 +21,36 @@ export function parseResponse<T>(
     console.error('Response parsing error:', parsedBody.error)
     throw new Error('Failed to parse response body')
   }
-  const result = parsedBody.data as T & { responseCode: number }
+  const result = parsedBody.data as T & {
+    responseCode: number
+    responseStatus: null
+  }
   return result
 }
 
-export function parseErrorResponse(axiosError: any) {
-  if (!axiosError.response) return
-  const { success, data, error } = baseApiErrorResponseSchema.safeParse({
-    ...axiosError.response.data,
-    responseCode: axiosError.response.status,
-  })
-  return data
+export function parseErrorResponse(axiosError: AxiosError) {
+  if (axiosError.response) {
+    const { success, data, error } = baseApiErrorResponseSchema.safeParse({
+      ...(axiosError.response.data as any),
+      responseCode: axiosError.response.status,
+    })
+    return { ...data, responseStatus: axiosError.code || undefined,  }
+  }
+  if (axiosError.request) {
+    console.error('Request error:', axiosError.message)
+    return {
+      responseCode: 0,
+      success: false,
+      responseStatus: axiosError.code || undefined,
+      message: axiosError.message || 'Request error occurred',
+    }
+  }
+
+  console.error('Network error:', axiosError.toJSON())
+  return {
+    responseCode: 0,
+    success: false,
+    responseStatus: axiosError.code || undefined,
+    message: 'Network error occurred',
+  }
 }

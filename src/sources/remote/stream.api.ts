@@ -1,4 +1,4 @@
-import { backendApiWithAuth } from '../api'
+import { backendApiWithAuth, runApi } from '../api'
 import { parseResponse } from '../utils'
 import {
   CreateStreamSchema,
@@ -25,7 +25,7 @@ export const updateStream = async (streamData: {
   id: string
   url?: string
 }) => {
-  const response = await backendApiWithAuth.patch(`stream`, streamData)
+  const response = await backendApiWithAuth.patch(`/stream`, streamData)
   const body = await response.data
   const sanitizedBody = parseResponse(response.status, body, UpdateStreamSchema)
   return sanitizedBody
