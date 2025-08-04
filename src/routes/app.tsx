@@ -29,6 +29,12 @@ export const Route = createFileRoute('/app')({
   pendingComponent: () => (
     <div className="flex h-full items-center justify-center">Loading...</div>
   ),
+  notFoundComponent: () => (
+    <div className="flex items-center justify-center flex-col w-full h-full grow">
+      <code className="text-2xl">404</code>
+      <p>Not Found, please back to previous page</p>
+    </div>
+  ),
 })
 
 function RouteComponent() {
