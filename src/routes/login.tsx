@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { ByeCheatingLogo } from '@/components/byecheating-logo'
 import { DarkModeToggle } from '@/components/molecules/dark-mode-toggle'
 import { PasswordInput } from '@/components/ui/password-input'
-import { backendApi, user } from '@/sources/api'
+import { backendApi, user } from '@/sources/remote/api'
 import { router } from '@/router'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -62,7 +62,7 @@ function BackendStatusMeter({ className }: { className?: string }) {
         <CardTitle>Backend Status</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-y-2 text-sm">
           <p>Backend URL</p>
           <code>{import.meta.env.VITE_BACKEND_URL ?? 'unknown'}</code>
           <p>Status</p>

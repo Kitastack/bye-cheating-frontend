@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ByeCheatingLogo } from '@/components/byecheating-logo'
 import { Button } from '@/components/ui/button'
-import { user } from '@/sources/api'
+import { user } from '@/sources/remote/api'
 
 export const Route = createFileRoute('/')({
   component: App,

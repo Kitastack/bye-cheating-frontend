@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
-import { user } from '@/sources/api'
+import { user } from '@/sources/remote/api'
 import { DashboardLayout } from '@/layout/dashboard-layout'
 
 export const Route = createFileRoute('/app')({
