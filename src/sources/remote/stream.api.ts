@@ -1,5 +1,5 @@
-import { backendApiWithAuth, runApi } from '../api'
 import { parseResponse } from '../utils'
+import { backendApiWithAuth } from './api'
 import {
   CreateStreamSchema,
   DeleteStreamSchema,

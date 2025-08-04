@@ -1,5 +1,5 @@
-import { backendApiWithAuth, runApi } from '../api'
 import { parseResponse } from '../utils'
+import { backendApiWithAuth } from './api'
 import { GetStreamingSchema } from './watch.type'
 /**
  * main function to get the streaming data from a live session

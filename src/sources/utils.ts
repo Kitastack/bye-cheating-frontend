@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios'
 import type * as z from 'zod/mini'
 /**
  * generic utils for parsing the body response using zod, with return type is generic object that merge with response code
- * * @param response  - Response object from fetch or any HTTP client
+ * @param response  - Response object from fetch or any HTTP client
  * @param body - Response JSON object body from fetch or any HTTP client
  * @param schema - Zod schema to validate the response body
  * @returns - Promise resolving to an object containing the parsed body with response code

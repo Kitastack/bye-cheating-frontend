@@ -1,11 +1,11 @@
 import axios, { AxiosError } from 'axios'
-import * as user from './remote/user.api'
-import * as live from './remote/live.api'
-import * as stream from './remote/stream.api'
-import * as watch from './remote/watch.api'
+import * as user from './user.api'
+import * as live from './live.api'
+import * as stream from './stream.api'
+import * as watch from './watch.api'
 
-import { baseApiErrorResponseSchema } from './remote/root.type'
-import { parseErrorResponse } from './utils'
+import { baseApiErrorResponseSchema } from './root.type'
+import { parseErrorResponse } from '../utils'
 import { env } from '@/env'
 import { StorageService } from '@/sources/local/storage-service'
 

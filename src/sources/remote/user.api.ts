@@ -1,6 +1,6 @@
-import { backendApi, backendApiWithAuth, runApi } from '../api'
 import { StorageService } from '../local/storage-service'
 import { parseResponse } from '../utils'
+import { backendApi, backendApiWithAuth } from './api'
 import {
   GetUserSchema,
   GetUsersSchema,
