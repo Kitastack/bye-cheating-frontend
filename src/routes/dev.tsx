@@ -20,7 +20,7 @@ function RouteComponent() {
         bottomComponent={
           <section className="flex gap-2 p-2">
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Button size={'icon'} variant={'default'}>
                   <PlayIcon />
                 </Button>
@@ -30,7 +30,7 @@ function RouteComponent() {
               </TooltipContent>
             </Tooltip>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <Button size={'icon'} variant={'outline'}>
                   <PauseIcon />
                 </Button>

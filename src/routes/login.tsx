@@ -2,6 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
+import { useEffect, useState } from 'react'
+import { AlertCircleIcon, CircleCheckIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
@@ -9,12 +11,77 @@ import { Button } from '@/components/ui/button'
 import { ByeCheatingLogo } from '@/components/byecheating-logo'
 import { DarkModeToggle } from '@/components/molecules/dark-mode-toggle'
 import { PasswordInput } from '@/components/ui/password-input'
-import { user } from '@/sources/api'
+import { backendApi, user } from '@/sources/api'
 import { router } from '@/router'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const Route = createFileRoute('/login')({
   component: LoginComponent,
 })
+
+function BackendStatusMeter({ className }: { className?: string }) {
+  const [connectionStatus, setConnectionStatus] = useState<
+    'connected' | 'loading' | 'disconnected' | 'error' | 'unknown'
+  >('disconnected')
+  const [statusCode, setStatusCode] = useState(0)
+
+  const pingServer = async () => {
+    try {
+      const result = await backendApi.get('/ping')
+      if (result.status) {
+        setConnectionStatus('connected')
+        setStatusCode(result.status)
+      }
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        if (!e.response) {
+          setConnectionStatus('error')
+          return
+        }
+        setConnectionStatus('error')
+        setStatusCode(e.response.status)
+        return
+      }
+      setConnectionStatus('unknown')
+      setStatusCode(0)
+    }
+  }
+  useEffect(() => {
+    pingServer()
+    const intervalId = setInterval(() => {
+      pingServer()
+    }, 10000)
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [])
+
+  return (
+    <Card className={cn('rounded-none shadow-none', className)}>
+      <CardHeader>
+        <CardTitle>Backend Status</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2">
+          <p>Backend URL</p>
+          <code>{import.meta.env.VITE_BACKEND_URL ?? 'unknown'}</code>
+          <p>Status</p>
+          <code className="flex gap-2 uppercase">
+            {' '}
+            {connectionStatus === 'connected' ? (
+              <CircleCheckIcon className="text-green-300 dark:text-green-400" />
+            ) : (
+              <AlertCircleIcon className="text-yellow-500 dark:text-yellow-300" />
+            )}{' '}
+            {connectionStatus}
+          </code>
+          <p>Code</p>
+          <code>{statusCode}</code>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
 
 function LoginForm({ className }: { className?: string }) {
   const form = useForm({
@@ -141,8 +208,8 @@ function LoginComponent() {
         <DarkModeToggle />
       </nav>
       <div className="grid grow grid-cols-1 md:grid-cols-2">
-        <section className="fixed hidden bg-slate-100 transition-colors md:relative md:flex md:items-center md:justify-center dark:bg-neutral-900">
-          <p>Text here</p>
+        <section className="fixed bg-slate-100 transition-colors md:relative md:flex md:items-center md:justify-center dark:bg-neutral-900">
+          <BackendStatusMeter />
         </section>
         <section className="relative flex flex-col items-center justify-center gap-8 border-l-2 bg-background p-8 transition-colors">
           <div className="flex max-w-md grow flex-col items-center justify-center gap-2">
