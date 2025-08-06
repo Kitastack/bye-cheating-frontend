@@ -1,4 +1,4 @@
-import { baseApiErrorResponseSchema } from './remote/root.type'
+import { baseApiErrorResponseSchema } from './remote/types/root'
 import type { AxiosError } from 'axios'
 import type * as z from 'zod/mini'
 /**

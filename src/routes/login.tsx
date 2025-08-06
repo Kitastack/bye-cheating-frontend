@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { ByeCheatingLogo } from '@/components/byecheating-logo'
 import { DarkModeToggle } from '@/components/molecules/dark-mode-toggle'
 import { PasswordInput } from '@/components/ui/password-input'
-import { backendApi, user } from '@/sources/remote/api'
+import { backendApi, user } from '@/sources/remote'
 import { router } from '@/router'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
