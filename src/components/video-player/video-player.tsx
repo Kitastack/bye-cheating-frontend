@@ -40,9 +40,9 @@ export default function VideoPlayer({
       const imageBitmap = await createImageBitmap(imageBlob)
 
       syncCanvasSize()
-
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height)
+
       imageBitmap.close()
     } catch (error) {
       console.error(`Failed to render frame:`, error)
@@ -57,15 +57,11 @@ export default function VideoPlayer({
   return (
     <div
       className={cn(
-        'relative flex aspect-video items-center justify-center border border-foreground shadow-lg',
+        'relative flex items-center justify-center border border-foreground shadow-lg',
         className,
       )}
     >
-      <canvas
-        ref={canvasRef}
-        inputMode="url"
-        className="h-full w-full grow bg-accent"
-      />
+      <canvas ref={canvasRef} className="h-full w-full grow bg-accent" />
       <section className="absolute top-0 left-0 m-2">
         {topLeftComponent}
       </section>
