@@ -1,6 +1,5 @@
-import { StorageService } from '../local/storage-service'
-import { parseResponse } from '../utils'
-import { backendApi, backendApiWithAuth } from './api'
+import { StorageService } from '../../local/storage-service'
+import { parseResponse } from '../../utils'
 import {
   GetUserSchema,
   GetUsersSchema,
@@ -8,7 +7,8 @@ import {
   RefreshTokenUserSchema,
   RegisterUserSchema,
   UpdateUserSchema,
-} from './user.type'
+} from '../types/user.api'
+import { backendApi, backendApiWithAuth } from '..'
 import { router } from '@/router'
 
 export const getUser = async () => {
@@ -73,11 +73,13 @@ export const loginUser = async (credentials: {
   )
   StorageService.setAccessToken(sanitizedBody.result?.accessToken ?? '')
   StorageService.setRefreshToken(sanitizedBody.result?.refreshToken ?? '')
+  StorageService.setIsAuthenticated(true)
   return sanitizedBody
 }
 
 export const logoutUser = () => {
   StorageService.clearTokens()
+  StorageService.setIsAuthenticated(false)
   router.navigate({ to: '/login', replace: true })
 }
 
@@ -98,6 +100,7 @@ export const refreshToken = async () => {
     RefreshTokenUserSchema,
   )
   StorageService.setAccessToken(sanitizedBody.result?.token ?? '')
+  StorageService.setIsAuthenticated(true)
 
   return {
     responseCode: sanitizedBody.responseCode,

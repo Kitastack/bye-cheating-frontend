@@ -1,5 +1,5 @@
 import * as z from 'zod/mini'
-import { baseApiResponseSchema } from './root.type'
+import { baseApiResponseSchema } from './root'
 
 export const StreamSchema = z.object({
   id: z.string(),

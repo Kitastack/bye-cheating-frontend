@@ -1,6 +1,10 @@
-import { parseResponse } from '../utils'
-import { backendApiWithAuth } from './api'
-import { CreateLiveSchema, GetLivesSchema, UpdateLiveSchema } from './live.type'
+import { parseResponse } from '../../utils'
+import {
+  CreateLiveSchema,
+  GetLivesSchema,
+  UpdateLiveSchema,
+} from '../types/live.api'
+import { backendApiWithAuth } from '..'
 
 /**
  * get video lives
@@ -48,8 +52,8 @@ export const updateVideoLive = async (liveData: {
   id: string
   expiryTimeInMinutes?: number
 }) => {
-    const response = await backendApiWithAuth.patch(`/live`, liveData)
-    const body = await response.data
-    const sanitizedBody = parseResponse(response.status, body, UpdateLiveSchema)
-    return sanitizedBody
+  const response = await backendApiWithAuth.patch(`/live`, liveData)
+  const body = await response.data
+  const sanitizedBody = parseResponse(response.status, body, UpdateLiveSchema)
+  return sanitizedBody
 }

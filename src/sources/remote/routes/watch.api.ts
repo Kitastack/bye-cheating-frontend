@@ -1,6 +1,6 @@
-import { parseResponse } from '../utils'
-import { backendApiWithAuth } from './api'
-import { GetStreamingSchema } from './watch.type'
+import { parseResponse } from '../../utils'
+import { GetStreamingSchema } from '../types/watch.api'
+import { backendApiWithAuth } from '..'
 /**
  * main function to get the streaming data from a live session
  * @param liveId {string} - The ID of the live session to fetch streaming data for

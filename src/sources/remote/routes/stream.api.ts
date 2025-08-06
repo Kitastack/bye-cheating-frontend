@@ -1,11 +1,11 @@
-import { parseResponse } from '../utils'
-import { backendApiWithAuth } from './api'
+import { parseResponse } from '../../utils'
 import {
   CreateStreamSchema,
   DeleteStreamSchema,
   GetStreamsSchema,
   UpdateStreamSchema,
-} from './stream.type'
+} from '../types/stream.api'
+import { backendApiWithAuth } from '..'
 
 export const getStreams = async () => {
   const response = await backendApiWithAuth.get(`/stream`)

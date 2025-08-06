@@ -1,5 +1,5 @@
 import * as z from 'zod/mini'
-import { baseApiResponseSchema } from './root.type'
+import { baseApiResponseSchema } from './root'
 
 export const GetStreamingSchema = z.extend(
   baseApiResponseSchema(z.nullish(z.string())),
