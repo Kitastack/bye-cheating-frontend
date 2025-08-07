@@ -7,11 +7,12 @@ import { StorageService } from '@/sources/local/storage-service'
 
 export const Route = createFileRoute('/app')({
   beforeLoad: async ({ location }) => {
-    const isAuthenticated = StorageService.getIsAuthenticated() 
-    console.log("authenticated? ", isAuthenticated)
+    const isAuthenticated = StorageService.getIsAuthenticated()
+    console.log('authenticated? ', isAuthenticated)
     if (isAuthenticated) return
     try {
       await user.getUser()
+      StorageService.setIsAuthenticated(true)
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 403) {
         toast.error('Unauthorized access', {
