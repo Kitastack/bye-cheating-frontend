@@ -76,7 +76,9 @@ export const loginUser = async (credentials: {
   StorageService.setIsAuthenticated(true)
   return sanitizedBody
 }
-
+/**
+ * logout user, and redirect to login page
+ */
 export const logoutUser = () => {
   StorageService.clearTokens()
   StorageService.setIsAuthenticated(false)

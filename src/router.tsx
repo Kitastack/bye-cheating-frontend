@@ -1,5 +1,5 @@
-import { createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
+import { createRouter } from '@tanstack/react-router'
+import { routeTree } from './routeTree.gen'
 import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider.tsx'
 
 // Create a new router instance
@@ -8,8 +8,7 @@ export const router = createRouter({
   context: {
     ...TanStackQueryProvider.getContext(),
   },
-  defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
+  defaultPreloadStaleTime: 1_000,
 })
