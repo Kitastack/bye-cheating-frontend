@@ -1,9 +1,8 @@
-import { Book, Home, MonitorIcon, MoonIcon, SunIcon, Users } from 'lucide-react'
+import { Book, Home, Users } from 'lucide-react'
 import { Link, useLocation } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import type { ReactNode } from 'react'
-import type { GlobalThemeType } from '@/provider/theme-provider'
 import { ByeCheatingLogo } from '@/components/byecheating-logo'
 import {
   Sidebar,
@@ -28,12 +27,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItemWithIcon,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useTheme } from '@/provider/theme-provider'
+import { DarkModeToggle } from '@/components/molecules/dark-mode-toggle'
 
 export function DashboardLayout({ children }: { children?: React.ReactNode }) {
   const location = useLocation()
@@ -41,13 +37,17 @@ export function DashboardLayout({ children }: { children?: React.ReactNode }) {
     <SidebarProvider>
       <DashboardSidebar />
       <SidebarInset className="flex grow flex-col">
-        <header className="flex h-16 gap-4 p-4">
-          <SidebarTrigger />
-          <Separator orientation="vertical" />
-          <code className="text-muted-foreground uppercase">
-            {location.pathname}
-          </code>
+        <header className="flex h-16 items-center justify-between gap-4 p-4">
+          <section className="flex h-full gap-4 items-center">
+            <SidebarTrigger />
+            <Separator orientation="vertical" />
+            <code className="text-muted-foreground uppercase">
+              {location.pathname}
+            </code>
+          </section>
+          <DarkModeToggle />
         </header>
+        <Separator orientation="horizontal" />
         <main className="grow p-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
@@ -65,7 +65,6 @@ function DashboardSidebarHeaderDropdownMenu({
 }: {
   children: ReactNode
 }) {
-  const { theme, setTheme } = useTheme()
   const { isMobile } = useSidebar()
   return (
     <DropdownMenu>
@@ -76,37 +75,12 @@ function DashboardSidebarHeaderDropdownMenu({
         align="start"
         className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-none"
       >
-        <DropdownMenuLabel className="text-muted-foreground font-jetbrains uppercase">Account</DropdownMenuLabel>
+        <DropdownMenuLabel className="font-jetbrains text-muted-foreground uppercase">
+          Account
+        </DropdownMenuLabel>
         <DropdownMenuItem asChild>
           <Link to="/app/profile">User Profile</Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel className='text-muted-foreground font-jetbrains  uppercase' >Dark Mode</DropdownMenuLabel>
-        <DropdownMenuRadioGroup
-          value={theme}
-          onValueChange={(value) => {
-            setTheme(value as GlobalThemeType)
-          }}
-        >
-          <DropdownMenuRadioItemWithIcon
-            customIcon={MonitorIcon}
-            value="system"
-          >
-            System
-          </DropdownMenuRadioItemWithIcon>
-          <DropdownMenuRadioItemWithIcon
-            customIcon={SunIcon}
-            value="light"
-          >
-            Light
-          </DropdownMenuRadioItemWithIcon>
-          <DropdownMenuRadioItemWithIcon
-            customIcon={MoonIcon}
-            value="dark"
-          >
-            Dark
-          </DropdownMenuRadioItemWithIcon>
-        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )
