@@ -1,4 +1,4 @@
-import { ComputerIcon, MoonIcon, SunIcon } from 'lucide-react'
+import { ComputerIcon, MonitorIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { useTheme } from '@/provider/theme-provider'
@@ -18,7 +18,7 @@ export function DarkModeToggle() {
             onClick={resetToSystemTheme}
             size={'icon'}
           >
-            <ComputerIcon />
+            <MonitorIcon />
           </Button>
         </TooltipTrigger>
         <TooltipContent>
