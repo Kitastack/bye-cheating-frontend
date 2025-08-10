@@ -1,6 +1,6 @@
 import * as z from 'zod/mini'
 
-const ImageStreamingSchema = z.object({
+const ImageStreamSourceSchema = z.object({
   status: z.boolean(),
   /** `base64` image string */
   result: z.nullish(z.string()),
@@ -17,8 +17,9 @@ const ImageStreamingSchema = z.object({
 })
 
 /**
- * ImageStreamService class to handle image streaming functionality, including manage connections and streaming URLs.
- * This service can be extended to include methods for starting, stopping, and managing image streams.
+ * ImageStreamService class to handle image streaming source.
+ *
+ * information is passed using callback, and the connection state can be controlled by calling the method from this class
  */
 export class ImageStreamService {
   /** EventSource instance for handling server-sent events */
@@ -27,7 +28,7 @@ export class ImageStreamService {
   streamUrl: string
   /** consume message information when `eventsource` is connected */
   messageCallback:
-    | ((message: z.infer<typeof ImageStreamingSchema>) => void)
+    | ((message: z.infer<typeof ImageStreamSourceSchema>) => void)
     | null = null
   /** consume error information when there's problem when `eventsource` is running.
    * you can update this to bind it with notification or logging for convenience */
@@ -45,7 +46,9 @@ export class ImageStreamService {
       if (!event.data) {
         return
       }
-      const parsedData = ImageStreamingSchema.safeParse(JSON.parse(event.data))
+      const parsedData = ImageStreamSourceSchema.safeParse(
+        JSON.parse(event.data),
+      )
       if (!parsedData.success) {
         console.error('Invalid data received from stream:', parsedData.error)
         return
