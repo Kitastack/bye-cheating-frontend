@@ -3,10 +3,11 @@ import { baseApiResponseSchema } from './root'
 
 export const LiveSchema = z.object({
   id: z.string(),
-  url: z.string(),
+  path: z.string(),
   streamId: z.string(),
   userId: z.string(),
   expiryDate: z.nullish(z.string()),
+  expiryTimeInMinutes: z.nullish(z.number()),
   createdDate: z.string(),
   updatedDate: z.nullish(z.string()),
 })
