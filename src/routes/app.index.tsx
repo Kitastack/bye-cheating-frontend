@@ -1,5 +1,9 @@
-import { createFileRoute, useStableCallback } from '@tanstack/react-router'
-import { RefreshCwIcon } from 'lucide-react'
+import { createFileRoute } from '@tanstack/react-router'
+import {
+  PlayIcon,
+  RefreshCwIcon,
+  SquareIcon,
+} from 'lucide-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm } from '@tanstack/react-form'
 import { useState } from 'react'
@@ -25,6 +29,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 
 export const Route = createFileRoute('/app/')({
   component: RouteComponent,
@@ -34,7 +40,31 @@ function VideoDisplay() {
   return (
     <section className="flex grow flex-col">
       <p className="font-bit">APPLICATION COMPONENT</p>
-      <VideoPlayer className="aspect-video min-h-[400px] w-min" />
+      <VideoPlayer
+        className="aspect-video min-h-[400px] w-min"
+        bottomComponent={
+          <section className="flex flex-col p-2">
+            <div></div>
+            <div className="flex justify-between">
+              <section className="flex gap-2">
+                <Button variant={'default'} size={'icon'}>
+                  <PlayIcon />
+                </Button>
+                <Button variant={'outline'} size={'icon'}>
+                  <SquareIcon />
+                </Button>
+                <Button variant={'outline'} size={'icon'}>
+                  <RefreshCwIcon />
+                </Button>
+              </section>
+              <section className="flex items-center justify-center space-x-2">
+                <Switch id="prediction-mode" />{' '}
+                <Label htmlFor="prediction-mode">Prediction Mode</Label>
+              </section>
+            </div>
+          </section>
+        }
+      />
     </section>
   )
 }
@@ -246,15 +276,15 @@ function RouteComponent() {
   return (
     <div className="flex h-full w-full grow gap-4">
       <Tabs defaultValue="streamlist" className="h-full">
-        <TabsList className="rounded-none bg-transparent font-bit">
+        <TabsList className="rounded-none bg-transparent p-0 font-bit">
           <TabsTrigger
-            className="rounded-none border-none font-bit data-[state=active]:bg-transparent data-[state=active]:underline data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
+            className="rounded-none border-b-0 font-bit text-muted-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:underline data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
             value="streamlist"
           >
             Stream List
           </TabsTrigger>
           <TabsTrigger
-            className="rounded-none border-none font-bit data-[state=active]:bg-transparent data-[state=active]:underline data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
+            className="rounded-none border border-b-0 font-bit text-muted-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:underline data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
             value="livelist"
           >
             Live List

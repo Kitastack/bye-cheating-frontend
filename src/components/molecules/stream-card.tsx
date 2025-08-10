@@ -1,5 +1,10 @@
 import { useState } from 'react'
-import { DeleteIcon, TrashIcon } from 'lucide-react'
+import {
+  CassetteTapeIcon,
+  CopyIcon,
+  TrashIcon,
+  TurntableIcon,
+} from 'lucide-react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
@@ -15,6 +20,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog'
+import { Separator } from '../ui/separator'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { stream } from '@/sources/remote'
 import { cn } from '@/lib/utils'
 
@@ -46,8 +53,8 @@ function DeleteStreamBtnDialog({ streamId }: { streamId: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size={'icon'} className="size-8" variant={'destructive'}>
-          <TrashIcon className="size-4" />
+        <Button size={'iconSm'} variant={'destructive'}>
+          <TrashIcon />
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -109,9 +116,26 @@ export function StreamCard({
       <section className="flex flex-col gap-2 p-0">
         <div className="grid w-fit grid-flow-col grid-rows-2 gap-x-4">
           <p className="text-muted-foreground">Stream ID:</p>
-          <code className="max-w-16 overflow-hidden text-nowrap text-ellipsis">
-            {id}
-          </code>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <code className="max-w-16 overflow-hidden text-nowrap text-ellipsis">
+                {id}
+              </code>
+            </TooltipTrigger>
+            <TooltipContent className="flex items-center gap-1 pl-1">
+              <Button
+                variant={'ghost'}
+                size={'iconSm'}
+                onClick={() => {
+                  navigator.clipboard.writeText(id)
+                  toast('Stream ID Copied')
+                }}
+              >
+                <CopyIcon />
+              </Button>
+              <code>{id}</code>
+            </TooltipContent>
+          </Tooltip>
           <p className="text-muted-foreground">Date</p>
           <code>{createdDate}</code>
         </div>
@@ -120,7 +144,18 @@ export function StreamCard({
           <code>{url}</code>
         </div>
       </section>
-      <DeleteStreamBtnDialog streamId={id} />
+      <Separator orientation="horizontal" />
+      <div className="flex gap-2">
+        <DeleteStreamBtnDialog streamId={id} />
+        <Button variant={'ghost'} size={'sm'}>
+          <p className="text-xs">Stream</p>
+          <TurntableIcon />
+        </Button>
+        <Button variant={'ghost'} size={'sm'}>
+          <p className="text-xs">Record</p>
+          <CassetteTapeIcon />
+        </Button>
+      </div>
     </div>
   )
 }
