@@ -16,6 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarSeparator,
   SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar'
@@ -38,7 +39,7 @@ export function DashboardLayout({ children }: { children?: React.ReactNode }) {
       <DashboardSidebar />
       <SidebarInset className="flex grow flex-col">
         <header className="flex h-16 items-center justify-between gap-4 p-4">
-          <section className="flex h-full gap-4 items-center">
+          <section className="flex h-full items-center gap-4">
             <SidebarTrigger />
             <Separator orientation="vertical" />
             <code className="text-muted-foreground uppercase">
@@ -117,7 +118,7 @@ function DashboardSidebarHeader() {
   )
 
   return (
-    <SidebarHeader className="flex items-center justify-center rounded transition-colors">
+    <SidebarHeader className="flex items-center justify-center rounded transition-colors h-16">
       <SidebarMenu>
         <SidebarMenuItem>
           <DashboardSidebarHeaderDropdownMenu>
@@ -152,6 +153,7 @@ function DashboardSidebar() {
   return (
     <Sidebar variant="sidebar" collapsible="icon">
       <DashboardSidebarHeader />
+      <SidebarSeparator/>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
