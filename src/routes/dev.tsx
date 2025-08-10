@@ -1,12 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { PauseIcon, PlayIcon } from 'lucide-react'
-import VideoPlayer from '@/components/video-player/video-player'
-import { Button } from '@/components/ui/button'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { StreamCard } from '@/components/molecules/stream-card'
 
 export const Route = createFileRoute('/dev')({
   component: RouteComponent,
@@ -15,33 +8,20 @@ export const Route = createFileRoute('/dev')({
 function RouteComponent() {
   return (
     <div className="flex grow flex-col items-center justify-center">
-      <VideoPlayer
-        className="w-4xl"
-        bottomComponent={
-          <section className="flex gap-2 p-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size={'icon'} variant={'default'}>
-                  <PlayIcon />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Play stream</p>
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button size={'icon'} variant={'outline'}>
-                  <PauseIcon />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Pause stream</p>
-              </TooltipContent>
-            </Tooltip>
-          </section>
-        }
+      <p>Stream List</p>
+      <div>
+
+      <StreamCard
+        createdDate="08-02-2003"
+        id="dakfjlakfjiealk"
+        url="rtsp://localhost:8554/live"
       />
+      <StreamCard
+        createdDate="08-02-2022"
+        id="pnoibpcounmpvnm"
+        url="rtsp://localhost:8554/live"
+      />
+      </div>
     </div>
   )
 }
