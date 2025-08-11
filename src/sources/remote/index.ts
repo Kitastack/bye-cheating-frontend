@@ -12,6 +12,7 @@ import {
   RootResponseErrorInterceptor,
 } from './interceptors'
 import { env } from '@/env'
+import { STREAM_URL } from '@/lib/constant'
 
 class AuthError extends AxiosError {
   constructor(message: string) {
@@ -23,6 +24,14 @@ class AuthError extends AxiosError {
 const backendApi = axios.create({
   baseURL: env.VITE_BACKEND_URL ?? undefined,
   timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+const streamApiWithAuth = axios.create({
+  baseURL: STREAM_URL ?? undefined,
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -46,6 +55,16 @@ backendApiWithAuth.interceptors.response.use(
   (response) => response,
   AuthResponseErrorInterceptor,
 )
+streamApiWithAuth.interceptors.request.use(
+  AuthRequestInterceptor,
+  AuthRequestErrorInterceptor,
+)
+streamApiWithAuth.interceptors.response.use(
+  (response) => response,
+  AuthResponseErrorInterceptor,
+)
+
+
 
 /**
  * wraps and API calls with error handling and parsing
@@ -60,4 +79,4 @@ export const runApi = async <T>(apiFunction: () => Promise<T>) => {
 
 export { user, live, stream, watch }
 export { AuthError }
-export { backendApi, backendApiWithAuth }
+export { backendApi, backendApiWithAuth, streamApiWithAuth }

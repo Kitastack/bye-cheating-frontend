@@ -15,7 +15,6 @@ export const LiveSchema = z.object({
 export const GetLivesSchema = baseApiResponseSchema(z.array(LiveSchema))
 export const CreateLiveSchema = baseApiResponseSchema(
   z.extend(LiveSchema, {
-    isPredictionEnabled: z.boolean(),
     path: z.string(),
     reportId: z.nullish(z.string()),
     expiryTimeInMinutes: z.nullish(z.number()),

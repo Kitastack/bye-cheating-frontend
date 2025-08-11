@@ -1,7 +1,6 @@
 import * as z from 'zod/mini'
 
 const ImageStreamSourceSchema = z.object({
-  status: z.boolean(),
   /** `base64` image string */
   result: z.nullish(z.string()),
   /** prediction information. the availability is really depends on if the prediction is uses or not */
@@ -14,6 +13,7 @@ const ImageStreamSourceSchema = z.object({
       }),
     ),
   ),
+  message: z.nullish(z.string()),
 })
 
 /**
@@ -26,6 +26,8 @@ export class ImageStreamService {
   private eventSource: EventSource | null = null
   /** URL for the image stream */
   streamUrl: string
+  streamUrlWithML: string
+  prediction: boolean
   /** consume message information when `eventsource` is connected */
   messageCallback:
     | ((message: z.infer<typeof ImageStreamSourceSchema>) => void)
@@ -34,14 +36,18 @@ export class ImageStreamService {
    * you can update this to bind it with notification or logging for convenience */
   errorCallback: ((error: Error) => void) | null = null
 
-  constructor(url: string) {
+  constructor(urlWithoutQueries: string) {
     // super('ImageStreamService')
-    this.streamUrl = url
+    this.streamUrl = `${urlWithoutQueries}?json=true`
+    this.streamUrlWithML = `${urlWithoutQueries}?json=true&prediction=true`
+    this.prediction = false
   }
 
   startStream() {
     this.stopStream()
-    this.eventSource = new EventSource(this.streamUrl)
+    this.eventSource = new EventSource(
+      this.prediction ? this.streamUrlWithML : this.streamUrl,
+    )
     this.eventSource.onmessage = (event) => {
       if (!event.data) {
         return
@@ -84,5 +90,8 @@ export class ImageStreamService {
     } else {
       console.warn('Stream is already running, cannot resume.')
     }
+  }
+  togglePrediction() {
+    this.prediction = !this.prediction
   }
 }
