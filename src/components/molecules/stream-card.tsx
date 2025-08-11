@@ -103,11 +103,15 @@ export function StreamCard({
   id,
   url,
   className,
+  onStreamClicked,
+  onRecordClicked,
 }: {
   createdDate: string
   id: string
   url: string
   className?: string
+  onStreamClicked?: (streamId: string) => void
+  onRecordClicked?: (streamId: string) => void
 }) {
   return (
     <div
@@ -147,11 +151,23 @@ export function StreamCard({
       <Separator orientation="horizontal" />
       <div className="flex gap-2">
         <DeleteStreamBtnDialog streamId={id} />
-        <Button variant={'ghost'} size={'sm'}>
+        <Button
+          onClick={() => {
+            if (onStreamClicked) onStreamClicked(id)
+          }}
+          variant={'ghost'}
+          size={'sm'}
+        >
           <p className="text-xs">Stream</p>
           <TurntableIcon />
         </Button>
-        <Button variant={'ghost'} size={'sm'}>
+        <Button
+          onClick={() => {
+            if (onRecordClicked) onRecordClicked(id)
+          }}
+          variant={'ghost'}
+          size={'sm'}
+        >
           <p className="text-xs">Record</p>
           <CassetteTapeIcon />
         </Button>
