@@ -15,6 +15,7 @@ export const env = createEnv({
   client: {
     VITE_APP_TITLE: z.nullish(z.string().check(z.minLength(1))),
     VITE_BACKEND_URL: z.nullish(z.string()),
+    VITE_STREAM_URL: z.nullish(z.string()),
   },
 
   /**
