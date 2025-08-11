@@ -7,6 +7,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
 import type { QueryClient } from '@tanstack/react-query'
 import TanStackQueryLayout from '@/integrations/tanstack-query/layout'
+import { ImageStreamingProvider } from '@/provider/image-streaming-provider'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -26,10 +27,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   }),
   component: () => (
     <>
-      <HeadContent />
-      <Outlet />
-      <TanStackRouterDevtools />
-      <TanStackQueryLayout />
+      <ImageStreamingProvider>
+        <HeadContent />
+        <Outlet />
+        <TanStackRouterDevtools />
+        <TanStackQueryLayout />
+      </ImageStreamingProvider>
     </>
   ),
 })

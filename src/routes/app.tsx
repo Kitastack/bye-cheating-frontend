@@ -45,7 +45,7 @@ export const Route = createFileRoute('/app')({
 function RouteComponent() {
   return (
     <DashboardLayout>
-      <Outlet />
+        <Outlet />
     </DashboardLayout>
   )
 }

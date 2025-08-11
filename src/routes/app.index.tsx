@@ -1,12 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import {
-  PlayIcon,
-  RefreshCwIcon,
-  SquareIcon,
-} from 'lucide-react'
+import { PlayIcon, RefreshCwIcon, SquareIcon } from 'lucide-react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm } from '@tanstack/react-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
 import { Separator } from '@/components/ui/separator'
@@ -31,29 +27,56 @@ import {
 } from '@/components/ui/dialog'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import { useImageStreaming } from '@/provider/image-streaming-provider'
 
 export const Route = createFileRoute('/app/')({
   component: RouteComponent,
 })
 
 function VideoDisplay() {
+  const { streamService, extendLiveStreamInOneMinutes } = useImageStreaming()
+  const [base64, setBase64] = useState('')
+  const [message, setMessage] = useState('')
+  useEffect(() => {
+    if (streamService) {
+      streamService.messageCallback = (msg) => {
+        setBase64(msg.result ?? '')
+        setMessage(msg.prediction?.toString() ?? '')
+      }
+      console.log(streamService.streamUrl)
+    }
+  }, [streamService])
+
   return (
     <section className="flex grow flex-col">
       <p className="font-bit">APPLICATION COMPONENT</p>
       <VideoPlayer
         className="aspect-video min-h-[400px] w-min"
+        base64Img={base64}
         bottomComponent={
           <section className="flex flex-col p-2">
             <div></div>
             <div className="flex justify-between">
               <section className="flex gap-2">
-                <Button variant={'default'} size={'icon'}>
+                <Button
+                  onClick={() => streamService?.startStream()}
+                  variant={'default'}
+                  size={'icon'}
+                >
                   <PlayIcon />
                 </Button>
-                <Button variant={'outline'} size={'icon'}>
+                <Button
+                  onClick={() => streamService?.stopStream()}
+                  variant={'outline'}
+                  size={'icon'}
+                >
                   <SquareIcon />
                 </Button>
-                <Button variant={'outline'} size={'icon'}>
+                <Button
+                  onClick={() => extendLiveStreamInOneMinutes()}
+                  variant={'outline'}
+                  size={'icon'}
+                >
                   <RefreshCwIcon />
                 </Button>
               </section>
@@ -104,6 +127,7 @@ function LiveList() {
             {filteredData.map((val) => {
               return (
                 <LiveCard
+                key={val.id}
                   id={val.id}
                   path={val.path}
                   createdDate={new Date(val.createdDate).toLocaleDateString()}
@@ -226,6 +250,8 @@ function StreamList() {
   })
   const filteredData = data?.result ?? []
 
+  const { createLiveStream } = useImageStreaming()
+
   const returnComponent = () => {
     switch (status) {
       case 'pending':
@@ -249,10 +275,15 @@ function StreamList() {
             {filteredData.map((val, _) => {
               return (
                 <StreamCard
+                  key={val.id}
                   className="text-xs"
                   createdDate={new Date(val.createdDate).toLocaleString()}
                   id={val.id}
                   url={val.url}
+                  onStreamClicked={(streamid) => {
+                    console.log(streamid)
+                    createLiveStream(streamid)
+                  }}
                 />
               )
             })}
