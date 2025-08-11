@@ -49,9 +49,8 @@ function VideoDisplay() {
 
   return (
     <section className="flex grow flex-col">
-      <p className="font-bit">APPLICATION COMPONENT</p>
       <VideoPlayer
-        className="aspect-video min-h-[400px] w-min"
+        className="h-[90%] w-[100%]"
         base64Img={base64}
         bottomComponent={
           <section className="flex flex-col p-2">
@@ -62,6 +61,7 @@ function VideoDisplay() {
                   onClick={() => streamService?.startStream()}
                   variant={'default'}
                   size={'icon'}
+                  disabled={streamService === undefined}
                 >
                   <PlayIcon />
                 </Button>
@@ -69,6 +69,7 @@ function VideoDisplay() {
                   onClick={() => streamService?.stopStream()}
                   variant={'outline'}
                   size={'icon'}
+                  disabled={streamService === undefined}
                 >
                   <SquareIcon />
                 </Button>
@@ -76,6 +77,7 @@ function VideoDisplay() {
                   onClick={() => extendLiveStreamInOneMinutes()}
                   variant={'outline'}
                   size={'icon'}
+                  disabled={streamService === undefined}
                 >
                   <RefreshCwIcon />
                 </Button>
@@ -92,60 +94,31 @@ function VideoDisplay() {
   )
 }
 
-function LiveList() {
-  const { status, data, error } = useQuery({
-    queryKey: ['getLives'],
-    queryFn: live.getVideoLives,
-  })
-
-  const filteredData = data?.result ?? []
-
-  const returnComponent = () => {
-    switch (status) {
-      case 'error':
-        return (
-          <div className="flex h-full w-full grow items-center justify-center">
-            Error occured: {error.message}
-          </div>
-        )
-      case 'pending':
-        return (
-          <div className="h-full w-full grow">
-            <Loading />
-          </div>
-        )
-      case 'success':
-        if (filteredData.length < 1) {
-          return (
-            <div className="flex h-full w-full grow items-center justify-center">
-              Stream empty
-            </div>
-          )
-        }
-        return (
-          <ScrollArea className="text-sm">
-            {filteredData.map((val) => {
-              return (
-                <LiveCard
-                key={val.id}
-                  id={val.id}
-                  path={val.path}
-                  createdDate={new Date(val.createdDate).toLocaleDateString()}
-                  expiryTimeInMinutes={val.expiryTimeInMinutes ?? 0}
-                  streamId={val.streamId}
-                />
-              )
-            })}
-          </ScrollArea>
-        )
-    }
-  }
-
+function Inspector() {
+  const { streamInfo, streamService } = useImageStreaming()
   return (
     <section className="flex h-full min-w-72 flex-col gap-2">
-      <div className="flex"></div>
-      <Separator />
-      {returnComponent()}
+      <div className="flex flex-col gap-4 text-xs">
+        <div>
+          <p className="text-muted-foreground">Live ID</p>
+          <p>{streamInfo?.liveId ?? 'No information provided'}</p>
+        </div>
+        <div>
+          <p className="text-muted-foreground">Stream ID</p>
+          <p>{streamInfo?.streamId ?? 'No information provided'}</p>
+        </div>
+        <div>
+          <p className="text-muted-foreground">Created At</p>
+          <p>
+            {streamInfo?.createdAt.toLocaleString() ??
+              'No information provided'}
+          </p>
+        </div>
+        <div>
+          <p className="text-muted-foreground">Stream Socket Available</p>
+          <p>{streamService ? 'Yes' : 'No'}</p>
+        </div>
+      </div>
     </section>
   )
 }
@@ -316,16 +289,16 @@ function RouteComponent() {
           </TabsTrigger>
           <TabsTrigger
             className="rounded-none border border-b-0 font-bit text-muted-foreground data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:underline data-[state=active]:shadow-none dark:data-[state=active]:bg-transparent"
-            value="livelist"
+            value="inspector"
           >
-            Live List
+            Video Player Inspector
           </TabsTrigger>
         </TabsList>
         <TabsContent value="streamlist" className="h-full">
           <StreamList />
         </TabsContent>
-        <TabsContent value="livelist" className="h-full">
-          <LiveList />
+        <TabsContent value="inspector" className="h-full">
+          <Inspector />
         </TabsContent>
       </Tabs>
       <Separator className="shrink" orientation="vertical" />

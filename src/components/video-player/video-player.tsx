@@ -41,7 +41,25 @@ export default function VideoPlayer({
 
       syncCanvasSize()
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height)
+
+      const wratio = canvas.width / imageBitmap.width
+      const hratio = canvas.height / imageBitmap.height
+      const ratio = Math.min(wratio, hratio)
+
+      const centerX = (canvas.width - imageBitmap.width * ratio) / 2
+      const centerY = (canvas.height - imageBitmap.height * ratio) / 2
+
+      ctx.drawImage(
+        imageBitmap,
+        0,
+        0,
+        imageBitmap.width,
+        imageBitmap.height,
+        centerX,
+        centerY,
+        imageBitmap.width * ratio,
+        imageBitmap.height * ratio,
+      )
 
       imageBitmap.close()
     } catch (error) {
@@ -61,7 +79,7 @@ export default function VideoPlayer({
         className,
       )}
     >
-      <canvas ref={canvasRef} className="h-full w-full grow bg-accent" />
+      <canvas ref={canvasRef} className="h-full w-full grow bg-black" />
       <section className="absolute top-0 left-0 m-2">
         {topLeftComponent}
       </section>

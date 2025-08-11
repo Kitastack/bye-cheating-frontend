@@ -94,4 +94,8 @@ export class ImageStreamService {
   togglePrediction() {
     this.prediction = !this.prediction
   }
+  togglePredictionAndReload() {
+    this.togglePrediction()
+    this.startStream()
+  }
 }
