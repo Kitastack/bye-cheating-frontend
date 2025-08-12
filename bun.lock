@@ -6,6 +6,7 @@
       "dependencies": {
         "@fontsource-variable/bitcount-prop-single": "^5.2.1",
         "@fontsource-variable/jetbrains-mono": "^5.2.6",
+        "@fontsource/geist-sans": "^5.2.5",
         "@hookform/resolvers": "^5.2.1",
         "@radix-ui/react-accordion": "^1.2.11",
         "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -248,6 +249,8 @@
     "@fontsource-variable/bitcount-prop-single": ["@fontsource-variable/bitcount-prop-single@5.2.1", "", {}, "sha512-ynHulWviAgtBucamOYpC8+/QA/vJhcOE9ihXMW9tF/gsOR6uLRvIfNfAj6NOP6ckTYuBmIHplJw7v3YNKUjFxA=="],
 
     "@fontsource-variable/jetbrains-mono": ["@fontsource-variable/jetbrains-mono@5.2.6", "", {}, "sha512-1pvtyK6H1paBOixbtZ9xfQgArVQ4SJMW3WSGZPOd5PiW3yg0t8umwKnjDMzW2ofb7qSdiXnsnIaHPT36vEOdlg=="],
+
+    "@fontsource/geist-sans": ["@fontsource/geist-sans@5.2.5", "", {}, "sha512-anllOHyJbElRs9fV15TeDRqAeb1IKm4bSknPl6ZMoyPTx1BBy7logudcUwpNjmQLkzn4Q0JGQLRCUKJYoyST6A=="],
 
     "@hookform/resolvers": ["@hookform/resolvers@5.2.1", "", { "dependencies": { "@standard-schema/utils": "^0.3.0" }, "peerDependencies": { "react-hook-form": "^7.55.0" } }, "sha512-u0+6X58gkjMcxur1wRWokA7XsiiBJ6aK17aPZxhkoYiK5J+HcTx0Vhu9ovXe6H+dVpO6cjrn2FkJTryXEMlryQ=="],
 

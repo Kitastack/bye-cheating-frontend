@@ -5,16 +5,16 @@ import { useForm } from '@tanstack/react-form'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { AxiosError } from 'axios'
+import type { PredictionStream } from '@/services/image-stream-service'
 import { Separator } from '@/components/ui/separator'
 import VideoPlayer from '@/components/video-player/video-player'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { live, stream } from '@/sources/remote'
+import { stream } from '@/sources/remote'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { StreamCard } from '@/components/molecules/stream-card'
 import { Loading } from '@/components/molecules/loading'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { LiveCard } from '@/components/molecules/live-card'
 import {
   Dialog,
   DialogClose,
@@ -34,14 +34,23 @@ export const Route = createFileRoute('/app/')({
 })
 
 function VideoDisplay() {
-  const { streamService, extendLiveStreamInOneMinutes } = useImageStreaming()
+  const { streamService, extendLiveStreamInOneMinutes, streamInfo } =
+    useImageStreaming()
   const [base64, setBase64] = useState('')
   const [message, setMessage] = useState('')
+  const [predictionData, setPredictionData] = useState<PredictionStream>([])
+  const [connectionStatus, setConnectionStatus] = useState('idle')
   useEffect(() => {
     if (streamService) {
       streamService.messageCallback = (msg) => {
         setBase64(msg.result ?? '')
         setMessage(msg.prediction?.toString() ?? '')
+      }
+      streamService.predictionCallback = (prediction) => {
+        setPredictionData(prediction)
+      }
+      streamService.statusCallback = (status) => {
+        setConnectionStatus(status)
       }
       console.log(streamService.streamUrl)
     }
@@ -52,6 +61,20 @@ function VideoDisplay() {
       <VideoPlayer
         className="h-[90%] w-[100%]"
         base64Img={base64}
+        topLeftComponent={
+          <section
+            data-is-set={streamInfo != undefined}
+            className="flex gap-2 p-1 text-xs text-white data-[is-set=true]:bg-primary data-[is-set=true]:text-primary-foreground"
+          >
+            <p>Current Live ID: </p>
+            <code>{streamInfo?.liveId ?? 'Not set'}</code>
+          </section>
+        }
+        topRightComponent={
+          <section className="flex gap-2 text-xs text-white">
+            Detection: {predictionData.length}
+          </section>
+        }
         bottomComponent={
           <section className="flex flex-col p-2">
             <div></div>
@@ -81,9 +104,18 @@ function VideoDisplay() {
                 >
                   <RefreshCwIcon />
                 </Button>
+                <Separator orientation="vertical" />
+                <code className="flex h-full items-center justify-center text-xs text-white">
+                  connection {connectionStatus}
+                </code>
               </section>
-              <section className="flex items-center justify-center space-x-2">
-                <Switch id="prediction-mode" />{' '}
+              <section className="flex items-center justify-center space-x-2 text-white">
+                <Switch
+                  onCheckedChange={(checked) =>
+                    streamService?.setPredictionAndReload(checked)
+                  }
+                  id="prediction-mode"
+                />{' '}
                 <Label htmlFor="prediction-mode">Prediction Mode</Label>
               </section>
             </div>

@@ -8,6 +8,8 @@ import * as TanStackQueryProvider from './integrations/tanstack-query/root-provi
 import '@fontsource-variable/jetbrains-mono'
 //  @ts-ignore ignore font import errors
 import '@fontsource-variable/bitcount-prop-single'
+// @ts-ignore ignore font import errors
+import '@fontsource/geist-sans'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
