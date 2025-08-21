@@ -126,7 +126,7 @@ export function ImageStreamingProvider({
     extendLiveStreamInOneMinutes,
   }
 
-  return <ImageStreamingContext value={value}>{children}</ImageStreamingContext>
+  return <ImageStreamingContext.Provider value={value}>{children}</ImageStreamingContext.Provider>
 }
 export function useImageStreaming() {
   const context = React.useContext(ImageStreamingContext)
